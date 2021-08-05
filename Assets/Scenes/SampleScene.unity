@@ -2477,12 +2477,15 @@ MonoBehaviour:
   _peasantCreateButton: {fileID: 745408573}
   _clickSound: {fileID: 1522578399}
   _backgroundMusic: {fileID: 827591159}
+  _strikeSword: {fileID: 0}
   _sounds: {fileID: 1466418528}
   _soundOn: {fileID: 21300000, guid: 2cc51ed62fef6b349ba05645fbbed2f7, type: 3}
   _soundOff: {fileID: 21300000, guid: 7bda31ea1eb054b4ea53426ed04c3fa7, type: 3}
   _firstScene: {fileID: 1944320729}
   _winScene: {fileID: 1831964309}
+  _resultWinValue: {fileID: 1053678433}
   _failScene: {fileID: 187432545}
+  _resultLoseValue: {fileID: 1599346448}
   _grainWinningCondition: 100
   _peasantWinningCondition: 20
   countPeasant: 5
@@ -2495,6 +2498,7 @@ MonoBehaviour:
   _costWarrior: 5
   countSeed: 10
   resourText: {fileID: 985235405}
+  _countEnemy: -4
 --- !u!1 &827591157
 GameObject:
   m_ObjectHideFlags: 0
@@ -2772,11 +2776,10 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u0421\u043E\u0431\u0440\u0430\u043D\u043D\u043E \u0437\u0435\u0440\u043D\u0430
-    -\n\u041D\u0430\u043D\u044F\u0442\u043E \u043A\u0440\u0435\u0441\u0442\u044C\u044F\u043D
-    -\n\u041D\u0430\u043D\u044F\u0442\u043E \u0432\u043E\u0439\u043D\u043E\u0432
-    -\n\u041F\u0435\u0440\u0435\u0436\u0438\u0442\u043E \u0432\u043E\u043B\u043D
-    -\n\u041F\u043E\u0442\u0435\u0440\u044F\u043D\u043E \u0432\u043E\u0439\u043D\u043E\u0432
-    -"
+    -\n\u0415\u0434\u044B \u0441\u044A\u0435\u0434\u0435\u043D\u043E -\n\u041D\u0430\u043D\u044F\u0442\u043E
+    \u043A\u0440\u0435\u0441\u0442\u044C\u044F\u043D -\n\u041D\u0430\u043D\u044F\u0442\u043E
+    \u0432\u043E\u0439\u043D\u043E\u0432 -\n\u041F\u0435\u0440\u0435\u0436\u0438\u0442\u043E
+    \u0432\u043E\u043B\u043D -"
 --- !u!222 &888716218
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4054,11 +4057,10 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u0421\u043E\u0431\u0440\u0430\u043D\u043D\u043E \u0437\u0435\u0440\u043D\u0430
-    -\n\u041D\u0430\u043D\u044F\u0442\u043E \u043A\u0440\u0435\u0441\u0442\u044C\u044F\u043D
-    -\n\u041D\u0430\u043D\u044F\u0442\u043E \u0432\u043E\u0439\u043D\u043E\u0432
-    -\n\u041F\u0435\u0440\u0435\u0436\u0438\u0442\u043E \u0432\u043E\u043B\u043D
-    -\n\u041F\u043E\u0442\u0435\u0440\u044F\u043D\u043E \u0432\u043E\u0439\u043D\u043E\u0432
-    -"
+    -\n\u0415\u0434\u044B \u0441\u044A\u0435\u0434\u0435\u043D\u043E -\n\u041D\u0430\u043D\u044F\u0442\u043E
+    \u043A\u0440\u0435\u0441\u0442\u044C\u044F\u043D -\n\u041D\u0430\u043D\u044F\u0442\u043E
+    \u0432\u043E\u0439\u043D\u043E\u0432 -\n\u041F\u0435\u0440\u0435\u0436\u0438\u0442\u043E
+    \u0432\u043E\u043B\u043D -"
 --- !u!222 &1449707862
 CanvasRenderer:
   m_ObjectHideFlags: 0
