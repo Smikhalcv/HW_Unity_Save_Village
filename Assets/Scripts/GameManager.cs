@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite _soundOff;
 
     [SerializeField] private GameObject _firstScene;
+    [SerializeField] private GameObject _gameScene;
     [SerializeField] private GameObject _winScene;
     [SerializeField] private Text _resultWinValue;
     [SerializeField] private GameObject _failScene;
@@ -41,7 +42,7 @@ public class GameManager : MonoBehaviour
     public int countSeed;
     public Text resourText;
 
-    [SerializeField] private float _countEnemy;
+    [SerializeField] private int _countEnemy;
 
     private static GameObject _currentScene;
     private static bool _muteFlag = true;
@@ -59,7 +60,7 @@ public class GameManager : MonoBehaviour
     private static System.Random random = new System.Random();
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         UpdateText();
         _backgroundMusic.Play();
@@ -68,7 +69,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (_playGame)
         {
@@ -80,12 +81,6 @@ public class GameManager : MonoBehaviour
             ConditionWin();
             UpdateText();
         }
-        //TimerCreateWarrior();
-        //CheckInteractableButtonForHireWarrior();
-        //TimerCreatePeasant();
-        //CheckInteractableButtonForHirePeasant();
-        //ConditionWin();
-        //UpdateText();
     }
 
     /// <summary>
@@ -151,7 +146,7 @@ public class GameManager : MonoBehaviour
         else if (_timeHireWarrior > -1)
         {
             countWarrior += 1;
-            _totalPeasant++;
+            _totalWarrior++;
             _timeHireWarrior = -2;
             _warriorTimer.fillAmount = 0;
         }
@@ -232,7 +227,6 @@ public class GameManager : MonoBehaviour
         if (countPeasant > _peasantWinningCondition && countSeed > _grainWinningCondition)
         {
             _playGame = false;
-            Time.timeScale = 0;
             ChangeScene(_winScene);
             _resultWinValue.text = _totalSeed + "\n" +
                 _totalFoodEaten + "\n" +
@@ -250,7 +244,6 @@ public class GameManager : MonoBehaviour
         if (countWarrior < 0)
         {
             _playGame = false;
-            Time.timeScale = 0;
             ChangeScene(_failScene);
             _resultLoseValue.text = _totalSeed + "\n" +
                 _totalFoodEaten + "\n" +
@@ -269,14 +262,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void VillageUnderAttack()
     {
-        if (_countEnemy > 0)
+        if (_countEnemy - 2 > 0)
         {
             _strikeSword.Play();
-            double deadWarrior = System.Math.Round(_countEnemy / 2);
-            countWarrior -= random.Next((int)deadWarrior, (int)_countEnemy + 1);
+            double deadWarrior = System.Math.Round((float)(_countEnemy - 2) / 2);
+            countWarrior -= random.Next((int)deadWarrior, (_countEnemy - 2) + 1);
             ConditionLose();
         }
-        _countEnemy += 2;
+        _countEnemy += 1;
     }
 
     /// <summary>
@@ -304,4 +297,29 @@ public class GameManager : MonoBehaviour
             VillageUnderAttack();
         }
     } 
+
+    /// <summary>
+    /// Перезапускает игру сначала
+    /// </summary>
+    public void RestartGame()
+    {
+        countPeasant = 5;
+        countSeed = 0;
+        countWarrior = 0;
+        _countEnemy = 0;
+        _totalFoodEaten = 0;
+        _totalPeasant = 0;
+        _totalSeed = 0;
+        _totalWarrior = 0;
+        _totalWave = 0;
+        _timeHirePeasant = -2;
+        _timeHireWarrior = -2;
+        _peasantTimer.fillAmount = 0;
+        _warriorTimer.fillAmount = 0;
+        //_eatingTimer.currentTime = _eatingTimer.maxTime + Time.deltaTime;
+        //_enemyTimer.currentTime = _enemyTimer.maxTime + +Time.deltaTime;
+        //_seedTimer.currentTime = _seedTimer.maxTime + +Time.deltaTime;
+        ChangeScene(_gameScene);
+        _playGame = true;
+    }
 }

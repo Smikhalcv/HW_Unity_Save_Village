@@ -441,6 +441,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 816391502}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: RestartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 816391502}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: ClickSound
         m_Mode: 1
         m_Arguments:
@@ -2319,6 +2331,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 816391502}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: RestartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &734519628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2646,23 +2670,24 @@ MonoBehaviour:
   _soundOn: {fileID: 21300000, guid: 2cc51ed62fef6b349ba05645fbbed2f7, type: 3}
   _soundOff: {fileID: 21300000, guid: 7bda31ea1eb054b4ea53426ed04c3fa7, type: 3}
   _firstScene: {fileID: 1944320729}
+  _gameScene: {fileID: 1175137846}
   _winScene: {fileID: 1831964309}
   _resultWinValue: {fileID: 1053678433}
   _failScene: {fileID: 187432545}
   _resultLoseValue: {fileID: 1599346448}
-  _grainWinningCondition: 100
-  _peasantWinningCondition: 20
+  _grainWinningCondition: 400
+  _peasantWinningCondition: 100
   countPeasant: 5
   productionSeedPeasant: 2
   _timeForCraetePeasant: 5
-  _costPeasant: 2
-  countWarrior: 1
+  _costPeasant: 4
+  countWarrior: 0
   eatingWarrior: 5
   _timeForCraeteWarrior: 10
   _costWarrior: 5
-  countSeed: 10
+  countSeed: 0
   resourText: {fileID: 985235405}
-  _countEnemy: -4
+  _countEnemy: 0
 --- !u!1 &827591157
 GameObject:
   m_ObjectHideFlags: 0
@@ -4765,6 +4790,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 15
   tick: 0
+  currentTime: 0
 --- !u!114 &1696413030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5691,6 +5717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 30
   tick: 0
+  currentTime: 0
 --- !u!1 &2034039147
 GameObject:
   m_ObjectHideFlags: 0
@@ -5822,6 +5849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTime: 10
   tick: 0
+  currentTime: 0
 --- !u!114 &2126192319
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,27 +7,27 @@ public class ImageTimer : MonoBehaviour
 {
     public float maxTime;
     public bool tick;
+    public float currentTime;
 
     private Image _imgTimer;
-    private float _currentTime;
     
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         _imgTimer = GetComponent<Image>();
-        _currentTime = maxTime;
+        currentTime = maxTime;
     }
 
     // Update is called once per frame
     void Update()
     {
         tick = false;
-        _currentTime -= Time.deltaTime;
-        _imgTimer.fillAmount = 1 - _currentTime / maxTime;
+        currentTime -= Time.deltaTime;
+        _imgTimer.fillAmount = 1 - currentTime / maxTime;
 
-        if (_currentTime <= 0)
+        if (currentTime <= 0)
         {
-            _currentTime = maxTime;
+            currentTime = maxTime;
             tick = true;
         }
     }
