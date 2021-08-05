@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    [SerializeField]
-    private bool _pauseTime = false;
+    public bool _pauseTime = false;
     [SerializeField]
     private bool _speedTime = false;
     [SerializeField]

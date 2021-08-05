@@ -54,6 +54,8 @@ public class GameManager : MonoBehaviour
     private static int _totalWave = 0;
     private static int _totalFoodEaten = 0;
 
+    private static bool _playGame = true;
+
     private static System.Random random = new System.Random();
 
     // Start is called before the first frame update
@@ -63,38 +65,27 @@ public class GameManager : MonoBehaviour
         _backgroundMusic.Play();
         _firstScene.SetActive(true);
         _currentScene = _firstScene;
-        //_warriorTimer.fillAmount = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Тик еды съедаемой войнами
-        if (_eatingTimer.tick)
+        if (_playGame)
         {
-            countSeed -= countWarrior * eatingWarrior;
-            _totalFoodEaten += countWarrior * eatingWarrior;
+            CheckTick();
+            TimerCreateWarrior();
+            CheckInteractableButtonForHireWarrior();
+            TimerCreatePeasant();
+            CheckInteractableButtonForHirePeasant();
+            ConditionWin();
+            UpdateText();
         }
-
-        // Тик еды добываемой крестьянами
-        if (_seedTimer.tick)
-        {
-            countSeed += countPeasant * productionSeedPeasant;
-            _totalSeed += countPeasant * productionSeedPeasant;
-        }
-
-        // Тик нападения на деревню
-        if (_enemyTimer.tick)
-        {
-            VillageUnderAttack();
-        }
-
-        TimerCreateWarrior();
-        CheckInteractableButtonForHireWarrior();
-        TimerCreatePeasant();
-        CheckInteractableButtonForHirePeasant();
-        ConditionWinOrFail();
-        UpdateText();
+        //TimerCreateWarrior();
+        //CheckInteractableButtonForHireWarrior();
+        //TimerCreatePeasant();
+        //CheckInteractableButtonForHirePeasant();
+        //ConditionWin();
+        //UpdateText();
     }
 
     /// <summary>
@@ -201,7 +192,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void CreatePeasant()
     {
-        countSeed -= countPeasant;
+        countSeed -= _costPeasant;
         _peasantCreateButton.interactable = false;
         _timeHirePeasant = _timeForCraetePeasant;
     }
@@ -234,12 +225,14 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Проверяет выйграл или проиграл игрок
+    /// Проверяет выйграл ли игрок
     /// </summary>
-    private void ConditionWinOrFail()
+    private void ConditionWin()
     {
         if (countPeasant > _peasantWinningCondition && countSeed > _grainWinningCondition)
         {
+            _playGame = false;
+            Time.timeScale = 0;
             ChangeScene(_winScene);
             _resultWinValue.text = _totalSeed + "\n" +
                 _totalFoodEaten + "\n" +
@@ -247,8 +240,17 @@ public class GameManager : MonoBehaviour
                 _totalWarrior + "\n" +
                 _totalWave;
         }
-        else if (countWarrior < 0)
+    }
+
+    /// <summary>
+    /// Проверяет проиграл ли игрок
+    /// </summary>
+    private void ConditionLose()
+    {
+        if (countWarrior < 0)
         {
+            _playGame = false;
+            Time.timeScale = 0;
             ChangeScene(_failScene);
             _resultLoseValue.text = _totalSeed + "\n" +
                 _totalFoodEaten + "\n" +
@@ -256,8 +258,15 @@ public class GameManager : MonoBehaviour
                 _totalWarrior + "\n" +
                 _totalWave;
         }
+        else
+        {
+            _totalWave += 1;
+        }
     }
 
+    /// <summary>
+    /// Уменьшает количество воинов после атаки и проверяет условие проигрыша
+    /// </summary>
     private void VillageUnderAttack()
     {
         if (_countEnemy > 0)
@@ -265,8 +274,34 @@ public class GameManager : MonoBehaviour
             _strikeSword.Play();
             double deadWarrior = System.Math.Round(_countEnemy / 2);
             countWarrior -= random.Next((int)deadWarrior, (int)_countEnemy + 1);
-            _totalWave++;
+            ConditionLose();
         }
         _countEnemy += 2;
     }
+
+    /// <summary>
+    /// Проверяет тики игры
+    /// </summary>
+    private void CheckTick()
+    {
+        //Тик еды съедаемой войнами
+        if (_eatingTimer.tick)
+        {
+            countSeed -= countWarrior * eatingWarrior;
+            _totalFoodEaten += countWarrior * eatingWarrior;
+        }
+
+        // Тик еды добываемой крестьянами
+        if (_seedTimer.tick)
+        {
+            countSeed += countPeasant * productionSeedPeasant;
+            _totalSeed += countPeasant * productionSeedPeasant;
+        }
+
+        // Тик нападения на деревню
+        if (_enemyTimer.tick)
+        {
+            VillageUnderAttack();
+        }
+    } 
 }
