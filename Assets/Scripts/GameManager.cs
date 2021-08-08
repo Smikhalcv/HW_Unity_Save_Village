@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite _soundOff;
 
     [SerializeField] private GameObject _firstScene;
+    [SerializeField] private GameObject _manualScene;
+    private static bool _manualSceneCheck = true;
     [SerializeField] private GameObject _gameScene;
     [SerializeField] private GameObject _winScene;
     [SerializeField] private Text _resultWinValue;
@@ -60,7 +62,6 @@ public class GameManager : MonoBehaviour
 
     private static System.Random random = new System.Random();
 
-    // Start is called before the first frame update
     private void Start()
     {
         UpdateText();
@@ -69,13 +70,27 @@ public class GameManager : MonoBehaviour
         _currentScene = _firstScene;
     }
 
-    // Update is called once per frame
+    private void OnEnable()
+    {
+        countPeasant = 5;
+        countSeed = 0;
+        countWarrior = 0;
+        _countEnemy = 0;
+        _totalFoodEaten = 0;
+        _totalPeasant = 0;
+        _totalSeed = 0;
+        _totalWarrior = 0;
+        _totalWave = 0;
+        _timeHirePeasant = -2;
+        _timeHireWarrior = -2;
+    }
+
     private void Update()
     {
         if (_playGame)
         {
             CheckTick();
-            TimerCreateWarrior(); // +1 wave
+            TimerCreateWarrior();
             CheckInteractableButtonForHireWarrior();
             TimerCreatePeasant();
             CheckInteractableButtonForHirePeasant();
@@ -85,7 +100,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Меняет сцену на указанную и закрывает следующую
+    /// Меняет сцену на указанную и закрывает предыдущую
     /// </summary>
     /// <param name="nextScene"></param>
     public void ChangeScene(GameObject nextScene)
@@ -98,7 +113,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Меняет изображение кнопки выключить звук
     /// </summary>
-    /// <param name="muteButton"></param>
+    /// <param name="muteButton">Кнопка для блокировки звука</param>
     public void ChangeSpriteSoundButton(Button muteButton)
     {
         if (_muteFlag)
@@ -129,13 +144,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void CreateWarrior()
     {
+        countPeasant -= 1;
         countSeed -= _costWarrior;
         _timeHireWarrior = _timeForCraeteWarrior;
         _warriorCreateButton.interactable = false;
     }
 
     /// <summary>
-    /// Отсчитывает время создания война и разблокирует кнопку вызова
+    /// Отсчитывает время создания война
     /// </summary>
     private void TimerCreateWarrior()
     {
@@ -158,7 +174,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void CheckInteractableButtonForHireWarrior()
     {
-        if (_costWarrior > countSeed || _timeHireWarrior > 0)
+        if (_costWarrior > countSeed || _timeHireWarrior > 0 || countPeasant <= 0)
         {
             _warriorCreateButton.interactable = false;
         }
@@ -194,7 +210,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Отсчитывает время создания крестьянина и разблокирует кнопку
+    /// Отсчитывает время создания крестьянина
     /// </summary>
     private void TimerCreatePeasant()
     {
@@ -222,7 +238,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Проверяет выйграл ли игрок
+    /// Проверяет выйграл ли игрок, если да то сбрасывает параметры.
     /// </summary>
     private void ConditionWin()
     {
@@ -236,15 +252,28 @@ public class GameManager : MonoBehaviour
                 _totalPeasant + "\n" +
                 _totalWarrior + "\n" +
                 (_totalWave - 2);
+            countPeasant = 5;
+            countSeed = 0;
+            countWarrior = 0;
+            _countEnemy = 0;
+            _totalFoodEaten = 0;
+            _totalPeasant = 0;
+            _totalSeed = 0;
+            _totalWarrior = 0;
+            _totalWave = 0;
+            _timeHirePeasant = -2;
+            _timeHireWarrior = -2;
+            _peasantTimer.fillAmount = 0;
+            _warriorTimer.fillAmount = 0;
         }
     }
 
     /// <summary>
-    /// Проверяет проиграл ли игрок
+    /// Проверяет проиграл ли игрок, если да то сбрасывает параметры, если нет увеличивает количество волн.
     /// </summary>
     private void ConditionLose()
     {
-        if (countWarrior < 0)
+        if (countWarrior < 0 || countPeasant < 0)
         {
             _playGame = false;
             countWarrior *= 0;
@@ -254,6 +283,19 @@ public class GameManager : MonoBehaviour
                 _totalPeasant + "\n" +
                 _totalWarrior + "\n" +
                 (_totalWave - 2);
+            countPeasant = 5;
+            countSeed = 0;
+            countWarrior = 0;
+            _countEnemy = -1;
+            _totalFoodEaten = 0;
+            _totalPeasant = 0;
+            _totalSeed = 0;
+            _totalWarrior = 0;
+            _totalWave = -2;
+            _timeHirePeasant = -2;
+            _timeHireWarrior = -2;
+            _peasantTimer.fillAmount = 0;
+            _warriorTimer.fillAmount = 0;
         }
         else
         {
@@ -262,22 +304,28 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Уменьшает количество воинов после атаки и проверяет условие проигрыша
+    /// Случайным образом уменьшает количество воинов после атаки и проверяет условие проигрыша. Увеличивает количество врагов
     /// </summary>
     private void VillageUnderAttack()
     {
         if (_countEnemy > 0)
         {
             _strikeSword.Play();
-            double deadWarrior = System.Math.Round((float)(_countEnemy) / 2);
+            double deadWarrior = System.Math.Floor((float)(_countEnemy) / 2);
             countWarrior -= random.Next((int)deadWarrior, (_countEnemy) + 1);
         }
         ConditionLose();
-        Debug.Log(_totalWave);
-        Debug.Log((_totalWave + 1) % 3);
+        IncrementCountEnemy();
+    }
+
+    /// <summary>
+    /// Увеличивает количество врагов
+    /// </summary>
+    private void IncrementCountEnemy()
+    {
         if ((_totalWave + 1) % 3 == 0)
         {
-            _countEnemy += 2;
+            _countEnemy += 1;
         }
     }
 
@@ -312,20 +360,37 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void RestartGame()
     {
-        countPeasant = 5;
-        countSeed = 0;
-        countWarrior = 0;
-        _countEnemy = -2;
-        _totalFoodEaten = 0;
-        _totalPeasant = 0;
-        _totalSeed = 0;
-        _totalWarrior = 0;
-        _totalWave = -2;
-        _timeHirePeasant = -2;
-        _timeHireWarrior = -2;
-        _peasantTimer.fillAmount = 0;
-        _warriorTimer.fillAmount = 0;
         ChangeScene(_gameScene);
         _playGame = true;
+    }
+
+    /// <summary>
+    /// Начинает игру, сбрасывая параметры и открывая инструкцию если надо
+    /// </summary>
+    public void StartGame()
+    {
+        if (_manualSceneCheck)
+        {
+            _manualSceneCheck = false;
+            ChangeScene(_manualScene);
+        }
+        else
+        {
+            ChangeScene(_gameScene);
+            countPeasant = 5;
+            countSeed = 0;
+            countWarrior = 0;
+            _countEnemy = 0;
+            _totalFoodEaten = 0;
+            _totalPeasant = 0;
+            _totalSeed = 0;
+            _totalWarrior = 0;
+            _totalWave = 0;
+            _timeHirePeasant = -2;
+            _timeHireWarrior = -2;
+            _peasantTimer.fillAmount = 0;
+            _warriorTimer.fillAmount = 0;
+            _playGame = true;
+        }
     }
 }
