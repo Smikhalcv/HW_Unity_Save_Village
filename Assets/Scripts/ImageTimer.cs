@@ -5,21 +5,26 @@ using UnityEngine.UI;
 
 public class ImageTimer : MonoBehaviour
 {
-    public float maxTime;
-    public bool tick;
-    public float currentTime;
+    [SerializeField] private float maxTime;
+    private bool tick;
+    private float currentTime;
 
     private Image _imgTimer;
     
+    public bool Tick
+    {
+        get { return this.tick; }
+    }
+
     // Start is called before the first frame update
-    void OnEnable()
+    private void OnEnable()
     {
         _imgTimer = GetComponent<Image>();
         currentTime = maxTime;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         tick = false;
         currentTime -= Time.deltaTime;

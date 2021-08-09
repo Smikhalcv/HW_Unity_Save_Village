@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    public bool _pauseTime = false;
+    [SerializeField]
+    private bool _pauseTime = false;
     [SerializeField]
     private bool _speedTime = false;
     [SerializeField]
@@ -13,9 +14,17 @@ public class TimeManager : MonoBehaviour
     private float _speedStepTime = 5;
 
     /// <summary>
+    /// Вызывает паузу в игре
+    /// </summary>
+    public void UsePauseGame()
+    {
+        PauseGame();
+    }
+
+    /// <summary>
     /// Ставит или снимает паузу в игре
     /// </summary>
-    public void PauseGame()
+    private void PauseGame()
     {
         if (_pauseTime)
         {
@@ -31,9 +40,17 @@ public class TimeManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Вызывает ускорение игры
+    /// </summary>
+    public void UseSpeedGame()
+    {
+        SpeedTime();
+    }
+
+    /// <summary>
     /// Ускоряет или возвращает назад время в игре
     /// </summary>
-    public void SpeedTime()
+    private void SpeedTime()
     {
         if (_speedTime)
         {

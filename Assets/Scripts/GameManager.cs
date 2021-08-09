@@ -33,17 +33,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _grainWinningCondition;
     [SerializeField] private int _peasantWinningCondition;
 
-    public int countPeasant;
-    public int productionSeedPeasant;
+    [SerializeField] private int countPeasant;
+    [SerializeField] private int productionSeedPeasant;
     [SerializeField] private int _timeForCraetePeasant;
     [SerializeField] private int _costPeasant;
-    public int countWarrior;
-    public int eatingWarrior;
+    [SerializeField] private int countWarrior;
+    [SerializeField] private int eatingWarrior;
     [SerializeField] private int _timeForCraeteWarrior;
     [SerializeField] private int _costWarrior;
-    public int countSeed;
-    public Text resourText;
-    public Text valueCountEnemy;
+    [SerializeField] private int countSeed;
+    [SerializeField] private Text resourText;
+    [SerializeField] private Text valueCountEnemy;
 
     [SerializeField] private int _countEnemy;
 
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     private static int _totalPeasant = 0;
     private static int _totalWarrior = 0;
     private static int _totalSeed = 0;
-    [SerializeField] private int _totalWave = 0;
+    private static int _totalWave = 0;
     private static int _totalFoodEaten = 0;
 
     private static bool _playGame = true;
@@ -100,10 +100,19 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Вызывает смену сцены
+    /// </summary>
+    /// <param name="nextScene">Сцена на которую необходимо поменять</param>
+    public void CallChangeScene(GameObject nextScene)
+    {
+        ChangeScene(nextScene);
+    }
+
+    /// <summary>
     /// Меняет сцену на указанную и закрывает предыдущую
     /// </summary>
-    /// <param name="nextScene"></param>
-    public void ChangeScene(GameObject nextScene)
+    /// <param name="nextScene">Следующая сцена</param>
+    private void ChangeScene(GameObject nextScene)
     {
         _currentScene.SetActive(false);
         _currentScene = nextScene;
@@ -276,13 +285,12 @@ public class GameManager : MonoBehaviour
         if (countWarrior < 0 || countPeasant < 0)
         {
             _playGame = false;
-            countWarrior *= 0;
-            ChangeScene(_failScene);
             _resultLoseValue.text = _totalSeed + "\n" +
                 _totalFoodEaten + "\n" +
                 _totalPeasant + "\n" +
                 _totalWarrior + "\n" +
                 (_totalWave - 2);
+            ChangeScene(_failScene);
             countPeasant = 5;
             countSeed = 0;
             countWarrior = 0;
@@ -335,21 +343,21 @@ public class GameManager : MonoBehaviour
     private void CheckTick()
     {
         //Тик еды съедаемой войнами
-        if (_eatingTimer.tick)
+        if (_eatingTimer.Tick)
         {
             countSeed -= countWarrior * eatingWarrior;
             _totalFoodEaten += countWarrior * eatingWarrior;
         }
 
         // Тик еды добываемой крестьянами
-        if (_seedTimer.tick)
+        if (_seedTimer.Tick)
         {
             countSeed += countPeasant * productionSeedPeasant;
             _totalSeed += countPeasant * productionSeedPeasant;
         }
 
         // Тик нападения на деревню
-        if (_enemyTimer.tick)
+        if (_enemyTimer.Tick)
         {
             VillageUnderAttack();
         }
