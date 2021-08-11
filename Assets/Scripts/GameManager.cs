@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,13 +14,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Button _warriorCreateButton;
     [SerializeField] private Button _peasantCreateButton;
-
-    [SerializeField] private AudioSource _clickSound;
-    [SerializeField] private AudioSource _backgroundMusic;
-    [SerializeField] private AudioSource _strikeSword;
-    [SerializeField] private GameObject _sounds;
-    [SerializeField] private Sprite _soundOn;
-    [SerializeField] private Sprite _soundOff;
 
     [SerializeField] private GameObject _firstScene;
     [SerializeField] private GameObject _manualScene;
@@ -48,7 +42,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _countEnemy;
 
     private static GameObject _currentScene;
-    private static bool _muteFlag = true;
+
     private static float _timeHireWarrior = -2;
     private static float _timeHirePeasant = -2;
 
@@ -60,14 +54,17 @@ public class GameManager : MonoBehaviour
 
     private static bool _playGame = true;
 
-    private static System.Random random = new System.Random();
+    private static System.Random _random = new System.Random();
+    [SerializeField] private SoundsManager _sounds;
+
 
     private void Start()
     {
         UpdateText();
-        _backgroundMusic.Play();
+
         _firstScene.SetActive(true);
         _currentScene = _firstScene;
+        
     }
 
     private void OnEnable()
@@ -117,35 +114,6 @@ public class GameManager : MonoBehaviour
         _currentScene.SetActive(false);
         _currentScene = nextScene;
         _currentScene.SetActive(true);
-    }
-
-    /// <summary>
-    /// Меняет изображение кнопки выключить звук
-    /// </summary>
-    /// <param name="muteButton">Кнопка для блокировки звука</param>
-    public void ChangeSpriteSoundButton(Button muteButton)
-    {
-        if (_muteFlag)
-        {
-            muteButton.image.sprite = _soundOff;
-            _sounds.SetActive(false);
-            _muteFlag = false;
-        }
-        else
-        {
-            muteButton.image.sprite = _soundOn;
-            _sounds.SetActive(true);
-            _backgroundMusic.Play();
-            _muteFlag = true;
-        }
-    }
-
-    /// <summary>
-    /// запускает звук клика на кнопку
-    /// </summary>
-    public void ClickSound()
-    {
-        _clickSound.Play();
     }
 
     /// <summary>
@@ -318,9 +286,9 @@ public class GameManager : MonoBehaviour
     {
         if (_countEnemy > 0)
         {
-            _strikeSword.Play();
+            _sounds.AttackSound();
             double deadWarrior = System.Math.Floor((float)(_countEnemy) / 2);
-            countWarrior -= random.Next((int)deadWarrior, (_countEnemy) + 1);
+            countWarrior -= _random.Next((int)deadWarrior, (_countEnemy) + 1);
         }
         ConditionLose();
         IncrementCountEnemy();
