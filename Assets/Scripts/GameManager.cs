@@ -7,10 +7,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private ImageTimer _seedTimer;
-    [SerializeField] private Image _peasantTimer;
-    [SerializeField] private Image _warriorTimer;
     [SerializeField] private ImageTimer _enemyTimer;
     [SerializeField] private ImageTimer _eatingTimer;
+    [SerializeField] private Image _peasantTimer;
+    [SerializeField] private Image _warriorTimer;
 
     [SerializeField] private Button _warriorCreateButton;
     [SerializeField] private Button _peasantCreateButton;
@@ -61,10 +61,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         UpdateText();
-
         _firstScene.SetActive(true);
         _currentScene = _firstScene;
-        
     }
 
     private void OnEnable()
